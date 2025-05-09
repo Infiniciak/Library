@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace Library
+﻿namespace Library
 {
-    partial class BookForm
+    partial class MemberForm
     {
         /// <summary>
         /// Required designer variable.
@@ -30,22 +28,12 @@ namespace Library
         /// </summary>
         private void InitializeComponent()
         {
-            SuspendLayout();
-            // 
-            // Form2
-            // 
-            AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
-            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(800, 450);
-            Name = "BookForm";
-            Text = "BookForm";
-            this.Load += new System.EventHandler(this.Form2_Load);
-            ResumeLayout(false);
+            this.components = new System.ComponentModel.Container();
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Text = "MemberForm";
         }
-        private void Form2_Load(object sender, EventArgs e)
-        {
-   
-        }
+
         #endregion
     }
 }
