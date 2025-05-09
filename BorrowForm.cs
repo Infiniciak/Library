@@ -131,8 +131,19 @@ namespace Library
 
             try
             {
-                _borrow.BookId = (int)cmbBooks.SelectedValue;
-                _borrow.MemberId = (int)cmbMembers.SelectedValue;
+                var selectedBook = cmbBooks.SelectedItem as Book;
+                var selectedMember = cmbMembers.SelectedItem as Member;
+
+                if (selectedBook == null || selectedMember == null)
+                {
+                    MessageBox.Show("Nieprawidłowe dane książki lub członka", "Błąd",
+                                  MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    this.DialogResult = DialogResult.None;
+                    return;
+                }
+
+                _borrow.BookId = selectedBook.Id;
+                _borrow.MemberId = selectedMember.Id;
                 _borrow.BorrowDate = dtpBorrowDate.Value;
                 _borrow.ReturnDate = dtpReturnDate.Checked ? dtpReturnDate.Value : null;
 

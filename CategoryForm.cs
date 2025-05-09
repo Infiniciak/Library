@@ -2,6 +2,8 @@
 using Library.Models;
 using System;
 using System.Drawing;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace Library
@@ -62,7 +64,10 @@ namespace Library
 
         private void BtnSave_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtName.Text))
+            string categoryName = txtName.Text;
+
+            // Walidacja, czy nazwa kategorii nie jest pusta
+            if (string.IsNullOrWhiteSpace(categoryName))
             {
                 MessageBox.Show("Nazwa kategorii jest wymagana!", "Błąd",
                               MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -70,9 +75,45 @@ namespace Library
                 return;
             }
 
+            // Walidacja, że nazwa kategorii ma co najmniej 3 znaki
+            if (categoryName.Length < 3)
+            {
+                MessageBox.Show("Nazwa kategorii musi mieć co najmniej 3 znaki.", "Błąd",
+                              MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                this.DialogResult = DialogResult.None;
+                return;
+            }
+
+            // Walidacja, że nazwa kategorii nie zawiera cyfr
+            if (Regex.IsMatch(categoryName, @"\d"))
+            {
+                MessageBox.Show("Nazwa kategorii nie może zawierać cyfr.", "Błąd",
+                              MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                this.DialogResult = DialogResult.None;
+                return;
+            }
+
+            // Walidacja, że nazwa kategorii zawiera tylko litery i spacje
+            if (!Regex.IsMatch(categoryName, @"^[a-zA-Z\s]+$"))
+            {
+                MessageBox.Show("Nazwa kategorii może zawierać tylko litery i spacje.", "Błąd",
+                              MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                this.DialogResult = DialogResult.None;
+                return;
+            }
+
             try
             {
-                _category.Name = txtName.Text;
+                _category.Name = categoryName;
+
+                // Sprawdzanie, czy kategoria już istnieje
+                if (_dbContext.Categories.Any(c => c.Name == categoryName && c.Id != _category.Id))
+                {
+                    MessageBox.Show("Kategoria o tej nazwie już istnieje!", "Błąd",
+                              MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    this.DialogResult = DialogResult.None;
+                    return;
+                }
 
                 if (_category.Id == 0)
                 {

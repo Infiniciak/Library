@@ -3,6 +3,7 @@ using Library.Models;
 using System;
 using System.Drawing;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace Library
@@ -109,6 +110,7 @@ namespace Library
 
         private void BtnSave_Click(object sender, EventArgs e)
         {
+            // Walidacja tytułu i autora
             if (string.IsNullOrWhiteSpace(txtTitle.Text) || string.IsNullOrWhiteSpace(txtAuthor.Text))
             {
                 MessageBox.Show("Tytuł i autor są wymagane!", "Błąd",
@@ -117,11 +119,32 @@ namespace Library
                 return;
             }
 
+            string author = txtAuthor.Text;
+            string isbn = txtISBN.Text;
+
+            // Walidacja dla autora (tylko litery i spacje)
+            if (!Regex.IsMatch(author, @"^[a-zA-Z\s]+$"))
+            {
+                MessageBox.Show("Autor może zawierać tylko litery i spacje.", "Błąd",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                this.DialogResult = DialogResult.None;
+                return;
+            }
+
+            // Walidacja ISBN (tylko cyfry i pauzy)
+            if (!Regex.IsMatch(isbn, @"^\d{3}-\d{1,5}-\d{1,7}-\d{1,7}-\d{1}$"))
+            {
+                MessageBox.Show("ISBN musi być w poprawnym formacie (np. 978-3-16-148410-0).", "Błąd",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                this.DialogResult = DialogResult.None;
+                return;
+            }
+
             try
             {
                 _book.Title = txtTitle.Text;
-                _book.Author = txtAuthor.Text;
-                _book.ISBN = txtISBN.Text;
+                _book.Author = author;
+                _book.ISBN = isbn;
                 _book.ReleaseYear = (int)numReleaseYear.Value;
 
                 // Aktualizacja kategorii

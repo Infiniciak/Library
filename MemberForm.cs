@@ -47,15 +47,49 @@ namespace Library
 
             btnSave.Click += async (s, e) =>
             {
-                if (string.IsNullOrWhiteSpace(txtEmail.Text) || string.IsNullOrWhiteSpace(txtCardNumber.Text))
+                string email = txtEmail.Text;
+                string cardNumber = txtCardNumber.Text;
+
+                // Walidacja, czy pola email i numer karty nie są puste
+                if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(cardNumber))
                 {
                     MessageBox.Show("Email i numer karty są wymagane!");
                     return;
                 }
 
-                // Asynchroniczna walidacja
-                bool emailExists = await _dbContext.Members.AnyAsync(m => m.Email == txtEmail.Text && m.Id != _member.Id);
-                bool cardExists = await _dbContext.Members.AnyAsync(m => m.CardNumber == txtCardNumber.Text && m.Id != _member.Id);
+                // Walidacja formatu emaila
+                if (!email.Contains("@"))
+                {
+                    MessageBox.Show("E-mail musi zawierać znak '@'.");
+                    return;
+                }
+
+                try
+                {
+                    // Sprawdzenie poprawności formatu e-maila
+                    var addr = new System.Net.Mail.MailAddress(email);
+                    if (addr.Address != email) // Potwierdzenie poprawności formatu
+                    {
+                        MessageBox.Show("Niepoprawny format e-maila.");
+                        return;
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("Niepoprawny format e-maila.");
+                    return;
+                }
+
+                // Walidacja numeru karty (sprawdzamy, czy składa się tylko z cyfr)
+                if (!cardNumber.All(char.IsDigit))
+                {
+                    MessageBox.Show("Numer karty musi składać się tylko z cyfr.");
+                    return;
+                }
+
+                // Asynchroniczna walidacja unikalności
+                bool emailExists = await _dbContext.Members.AnyAsync(m => m.Email == email && m.Id != _member.Id);
+                bool cardExists = await _dbContext.Members.AnyAsync(m => m.CardNumber == cardNumber && m.Id != _member.Id);
 
                 if (emailExists)
                 {
@@ -69,10 +103,17 @@ namespace Library
                     return;
                 }
 
+                // Walidacja: Imię i Nazwisko nie mogą być puste
+                if (string.IsNullOrWhiteSpace(txtName.Text) || string.IsNullOrWhiteSpace(txtSurname.Text))
+                {
+                    MessageBox.Show("Imię i nazwisko są wymagane.");
+                    return;
+                }
+
                 _member.Name = txtName.Text;
                 _member.Surname = txtSurname.Text;
-                _member.CardNumber = txtCardNumber.Text;
-                _member.Email = txtEmail.Text;
+                _member.CardNumber = cardNumber;
+                _member.Email = email;
 
                 if (_member.Id == 0)
                     _dbContext.Members.Add(_member);
