@@ -56,6 +56,10 @@
     <Compile Include="MemberForm.Designer.cs" />
     <Compile Include="Migrations\20250509001746_InitialCreate.cs" />
     <Compile Include="Migrations\20250509001746_InitialCreate.Designer.cs" />
+    <Compile Include="Migrations\20250509135156_initial.cs" />
+    <Compile Include="Migrations\20250509135156_initial.Designer.cs" />
+    <Compile Include="Migrations\20250509135210_initiall.cs" />
+    <Compile Include="Migrations\20250509135210_initiall.Designer.cs" />
     <Compile Include="Migrations\LibraryDbContextModelSnapshot.cs" />
     <Compile Include="Models\Book.cs" />
     <Compile Include="Models\Borrow.cs" />

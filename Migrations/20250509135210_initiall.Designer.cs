@@ -3,15 +3,17 @@ using System;
 using Library.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Library.Migrations
 {
     [DbContext(typeof(LibraryDbContext))]
-    partial class LibraryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250509135210_initiall")]
+    partial class initiall
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,32 +46,6 @@ namespace Library.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("books");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Author = "J.R.R. Tolkien",
-                            ISBN = "9780261102217",
-                            ReleaseYear = 1937,
-                            Title = "The Hobbit"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Author = "Frank Herbert",
-                            ISBN = "9780441172719",
-                            ReleaseYear = 1965,
-                            Title = "Dune"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Author = "Jane Austen",
-                            ISBN = "9780141439518",
-                            ReleaseYear = 1813,
-                            Title = "Pride and Prejudice"
-                        });
                 });
 
             modelBuilder.Entity("Library.Models.BookCategory", b =>
@@ -85,23 +61,6 @@ namespace Library.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("books_categories");
-
-                    b.HasData(
-                        new
-                        {
-                            BookId = 1,
-                            CategoryId = 1
-                        },
-                        new
-                        {
-                            BookId = 2,
-                            CategoryId = 2
-                        },
-                        new
-                        {
-                            BookId = 3,
-                            CategoryId = 3
-                        });
                 });
 
             modelBuilder.Entity("Library.Models.Borrow", b =>
@@ -130,23 +89,6 @@ namespace Library.Migrations
                     b.HasIndex("MemberId");
 
                     b.ToTable("borrows");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            BookId = 1,
-                            BorrowDate = new DateTime(2025, 4, 25, 15, 54, 54, 910, DateTimeKind.Local).AddTicks(6380),
-                            MemberId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            BookId = 2,
-                            BorrowDate = new DateTime(2025, 5, 2, 15, 54, 54, 912, DateTimeKind.Local).AddTicks(5261),
-                            MemberId = 2,
-                            ReturnDate = new DateTime(2025, 5, 8, 15, 54, 54, 912, DateTimeKind.Local).AddTicks(5288)
-                        });
                 });
 
             modelBuilder.Entity("Library.Models.Category", b =>
@@ -163,33 +105,6 @@ namespace Library.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("categories");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Fantasy"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Science Fiction"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Romance"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Thriller"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "Biography"
-                        });
                 });
 
             modelBuilder.Entity("Library.Models.Member", b =>
@@ -218,24 +133,6 @@ namespace Library.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("members");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CardNumber = "M001",
-                            Email = "john.doe@example.com",
-                            Name = "John",
-                            Surname = "Doe"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CardNumber = "M002",
-                            Email = "jane.smith@example.com",
-                            Name = "Jane",
-                            Surname = "Smith"
-                        });
                 });
 
             modelBuilder.Entity("Library.Models.BookCategory", b =>
